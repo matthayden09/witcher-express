@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const characters = [
@@ -32,6 +32,10 @@ const characters = [
     }
 ]
 
+/**
+ * HTML ROUTES
+ */
+
 app.get('/', (req, res) => {
     res.send("Welcome Dh'oine")
 })
@@ -41,7 +45,7 @@ app.get('/', (req, res) => {
  */
 
 // /api/characters - show all character data
-app.get('/api/characters', (req, res) =>{
+app.get('/api/characters', (req, res) => {
     res.json(characters)
 })
 
@@ -52,14 +56,22 @@ app.get('/api/characters/:routeName', (req, res) => {
     const character = characters.find(character => {
         return character.routeName === targetCharacter
     })
-    
+
 
     res.json(character);
 })
 
+// add new characters
 app.post('/api/characters/add', (req, res) => {
-    console.log(req.body)
-    res.end()
+
+    const newCharacter = req.body;
+
+    newCharacter.routeName = newCharacter.name.replace(/ /g, '').toLowerCase();
+
+
+    characters.push(newCharacter);
+
+    res.status(200).send();
 })
 
 
